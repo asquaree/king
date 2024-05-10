@@ -19,8 +19,19 @@ public class WarriorKillDb {
         this.newWarriorKill = newWarriorKill;
     }
 
-    private Map<String, Integer> newWarriorKill= new HashMap<>();
-    private Map<String,String> warriorCodeName = new HashMap<>();
+    private Map<String, Integer> newWarriorKill = new HashMap<>();
+    private Map<String, String> warriorCodeName = new HashMap<>();
+
+    public Map<String, Integer> getTop5WarriorNameKill() {
+        return top5WarriorNameKill;
+    }
+
+    public void setTop5WarriorNameKill(Map<String, Integer> top5WarriorNameKill) {
+        this.top5WarriorNameKill = top5WarriorNameKill;
+    }
+
+    private Map<String, Integer> top5WarriorNameKill = new HashMap<>();
+
 
     public Map<String, Integer> getWarriorCodeKillCount() {
         return warriorCodeKillCount;
@@ -38,9 +49,9 @@ public class WarriorKillDb {
         this.warriorCodeName = warriorCodeName;
     }
 
-    private Map<String,Integer> warriorCodeKillCount = new HashMap<>();
+    private Map<String, Integer> warriorCodeKillCount = new HashMap<>();
 
-    public Map<String,Integer> getTop5warriors() {
+    public Map<String, Integer> getTop5warriors() {
         return top5warriors;
     }
 
@@ -48,9 +59,9 @@ public class WarriorKillDb {
         this.top5warriors = top5warriors;
     }
 
-    private Map<String,Integer> top5warriors = new HashMap<>();
+    private Map<String, Integer> top5warriors = new HashMap<>();
 
-    private String tieCaseWarriorCode ="";
+    private String tieCaseWarriorCode = "";
 
     public String getTieCaseWarriorCode() {
         return tieCaseWarriorCode;

@@ -39,13 +39,14 @@ public class WarriorKillCountServiceImpl implements WarriorKillCountServiceInter
 
         String warriorCode = killerCodeKill.entrySet().iterator().next().getKey();
         updateTop5(warriorCode, Integer.parseInt(killerCodeKill.get(warriorCode)));
+        logger.info("Top 5 scorers ...... {}", top5Scorers);
         return Boolean.TRUE;
     }
 
 
     private void updateTop5(String warriorCode, Integer newKill) {
 
-        logger.info("updating top5 scorers... warriorCode: {}, kill: {}", warriorCode, newKill);
+        logger.info("warrior: {} killed: {}", warriorKillDb.getWarriorCodeName().get(warriorCode), newKill);
 
         Map<String, Integer> warriorCodeKill = warriorKillDb.getWarriorCodeKillCount();
 
@@ -79,6 +80,7 @@ public class WarriorKillCountServiceImpl implements WarriorKillCountServiceInter
 
     public Boolean setWarriorCodeName(Map<String, String> warriorCodeName) {
         warriorKillDb.setWarriorCodeName(warriorCodeName);
+        logger.info("Registered players - {}", warriorCodeName);
         return true;
     }
 
@@ -89,5 +91,15 @@ public class WarriorKillCountServiceImpl implements WarriorKillCountServiceInter
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
-    public
+    public Map<String, Integer> getTop5Warriors() {
+        logger.info("fetching top warriors.....");
+        Map<String, Integer> top5WarriorNamesKills = new HashMap<>();
+        if (!warriorKillDb.getTop5warriors().isEmpty()) {
+            warriorKillDb.getTop5warriors().forEach((warriorCode, kill) -> top5WarriorNamesKills.put(warriorKillDb.getWarriorCodeName().get(warriorCode), kill));
+            warriorKillDb.setTop5WarriorNameKill(top5WarriorNamesKills);
+        }
+        return warriorKillDb.getTop5WarriorNameKill();
+    }
+
+
 }

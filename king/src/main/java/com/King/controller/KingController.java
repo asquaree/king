@@ -30,14 +30,16 @@ public class KingController {
     }
 
     @GetMapping("/registeredWarriors")
-    public ResponseEntity<Map<String,String>> getRegisteredWarriors() {
+    public ResponseEntity<Map<String, String>> getRegisteredWarriors() {
 
         return ResponseEntity.ok(warriorKillDb.getWarriorCodeName());
     }
 
-//    public ResponseEntity<Map<String,Integer>> getTop5Warriors() {
-//
-//    }
+    @GetMapping("/top5Players")
+    public ResponseEntity<Map<String, Integer>> getTop5Warriors() {
+
+        return ResponseEntity.ok(warriorKillCountServiceImpl.getTop5Warriors());
+    }
 
 
 }
