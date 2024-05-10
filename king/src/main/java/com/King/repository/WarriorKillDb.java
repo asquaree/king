@@ -40,15 +40,15 @@ public class WarriorKillDb {
 
     private Map<String,Integer> warriorCodeKillCount = new HashMap<>();
 
-    public TreeMap<String,Integer> getTop5warriors() {
+    public Map<String,Integer> getTop5warriors() {
         return top5warriors;
     }
 
-    public void setTop5warriors(TreeMap<String, Integer> top5warriors) {
+    public void setTop5warriors(Map<String, Integer> top5warriors) {
         this.top5warriors = top5warriors;
     }
 
-    private TreeMap<String,Integer> top5warriors = new TreeMap<>();
+    private Map<String,Integer> top5warriors = new HashMap<>();
 
     private String tieCaseWarriorCode ="";
 

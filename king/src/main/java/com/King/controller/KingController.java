@@ -35,5 +35,9 @@ public class KingController {
         return ResponseEntity.ok(warriorKillDb.getWarriorCodeName());
     }
 
+//    public ResponseEntity<Map<String,Integer>> getTop5Warriors() {
+//
+//    }
+
 
 }
