@@ -52,29 +52,22 @@ public class WarriorKillCountServiceImpl implements WarriorKillCountServiceInter
 
         warriorCodeKill.put(warriorCode, newKill + warriorCodeKill.getOrDefault(warriorCode, 0));
         warriorKillDb.setWarriorCodeKillCount(warriorCodeKill);
-        if (warriorKillDb.getTop5warriors().isEmpty()) {
-            top5Scorers.put(warriorCode, newKill);
-            warriorKillDb.setTop5warriors(top5Scorers);
-            return;
-        }
-        if (top5Scorers.size() < 5) {
 
-            top5Scorers.put(warriorCode, warriorCodeKill.get(warriorCode));
-        } else {
+        if (top5Scorers.size() >= 5) {
             if (top5Scorers.containsKey(warriorCode)) {
                 top5Scorers.put(warriorCode, warriorCodeKill.get(warriorCode));
             } else {
-
                 String lastWarriorCode = top5Scorers.keySet().toArray()[4].toString();
                 if (warriorCodeKill.get(lastWarriorCode) < warriorCodeKill.get(warriorCode)) {
                     top5Scorers.remove(lastWarriorCode);
                     top5Scorers.put(warriorCode, warriorCodeKill.get(warriorCode));
                 }
             }
-            top5Scorers = sortByValueDescending(top5Scorers);
-
+        } else {
+            top5Scorers.put(warriorCode, warriorCodeKill.get(warriorCode));
         }
 
+        top5Scorers = sortByValueDescending(top5Scorers);
         warriorKillDb.setTop5warriors(top5Scorers);
     }
 
@@ -84,7 +77,7 @@ public class WarriorKillCountServiceImpl implements WarriorKillCountServiceInter
         return true;
     }
 
-    public static <K, V extends Comparable<V>> Map<K, V> sortByValueDescending(Map<K, V> map) {
+    private <K, V extends Comparable<V>> Map<K, V> sortByValueDescending(Map<K, V> map) {
         return map.entrySet()
                 .stream()
                 .sorted(Map.Entry.<K, V>comparingByValue().reversed())

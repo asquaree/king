@@ -4,23 +4,18 @@ import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 @Repository
 public class WarriorKillDb {
 
 
-    public Map<String, Integer> getNewWarriorKill() {
-        return newWarriorKill;
-    }
-
-    public void setNewWarriorKill(Map<String, Integer> newWarriorKill) {
-        this.newWarriorKill = newWarriorKill;
-    }
-
     private Map<String, Integer> newWarriorKill = new HashMap<>();
     private Map<String, String> warriorCodeName = new HashMap<>();
+    private Map<String, Integer> top5warriors = new HashMap<>();
+    private String tieCaseWarriorCode = "";
+    private Map<String, Integer> top5WarriorNameKill = new HashMap<>();
+    private Map<String, Integer> warriorCodeKillCount = new HashMap<>();
+
 
     public Map<String, Integer> getTop5WarriorNameKill() {
         return top5WarriorNameKill;
@@ -29,8 +24,6 @@ public class WarriorKillDb {
     public void setTop5WarriorNameKill(Map<String, Integer> top5WarriorNameKill) {
         this.top5WarriorNameKill = top5WarriorNameKill;
     }
-
-    private Map<String, Integer> top5WarriorNameKill = new HashMap<>();
 
 
     public Map<String, Integer> getWarriorCodeKillCount() {
@@ -49,7 +42,6 @@ public class WarriorKillDb {
         this.warriorCodeName = warriorCodeName;
     }
 
-    private Map<String, Integer> warriorCodeKillCount = new HashMap<>();
 
     public Map<String, Integer> getTop5warriors() {
         return top5warriors;
@@ -59,9 +51,14 @@ public class WarriorKillDb {
         this.top5warriors = top5warriors;
     }
 
-    private Map<String, Integer> top5warriors = new HashMap<>();
+    public Map<String, Integer> getNewWarriorKill() {
+        return newWarriorKill;
+    }
 
-    private String tieCaseWarriorCode = "";
+    public void setNewWarriorKill(Map<String, Integer> newWarriorKill) {
+        this.newWarriorKill = newWarriorKill;
+    }
+
 
     public String getTieCaseWarriorCode() {
         return tieCaseWarriorCode;
