@@ -19,7 +19,6 @@ public class KingController {
     @Autowired
     private WarriorKillDb warriorKillDb;
 
-
     @PostMapping("/registerWarriors")
     public ResponseEntity<String> registerWarriors(@RequestBody Map<String, String> warriorCodeName) {
         // Access data from the map

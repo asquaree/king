@@ -1,7 +1,6 @@
 package com.King.config;
 
 import com.King.constants.AppConstants;
-import com.King.service.WarriorKillCountServiceImpl;
 import com.King.service.WarriorKillCountServiceInterface;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Configuration;
@@ -17,9 +16,6 @@ import java.util.Map;
 
 @Configuration
 public class KafkaConfig {
-
-    //private final Logger logger = LoggerFactory.getLogger(KafkaService.class);
-
 
     private final ObjectMapper objectMapper;
 
