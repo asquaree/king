@@ -29,8 +29,8 @@ public class WarriorKillCountServiceImpl implements WarriorKillCountServiceInter
 
     private Map<String, Integer> top5Scorers = new HashMap<>();
 
+    @Override
     public void updateWarriorKills(Map<String, String> killerCodeKill) {
-
 
         String warriorCode = killerCodeKill.entrySet().iterator().next().getKey();
         updateTop5(warriorCode, Integer.parseInt(killerCodeKill.get(warriorCode)));
@@ -64,11 +64,13 @@ public class WarriorKillCountServiceImpl implements WarriorKillCountServiceInter
         warriorKillDb.setTop5warriors(top5Scorers);
     }
 
+    @Override
     public void setWarriorCodeName(Map<String, String> warriorCodeName) {
         warriorKillDb.setWarriorCodeName(warriorCodeName);
         logger.info("Registered players - {}", warriorCodeName);
     }
 
+    @Override
     public Map<String, Integer> getTop5Warriors() {
         logger.info("fetching top warriors.....");
         Map<String, Integer> top5WarriorNamesKills = warriorKillDb.getTop5WarriorNameKill();
