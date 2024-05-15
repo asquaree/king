@@ -48,25 +48,24 @@ public class WarriorKillCountServiceImpl implements WarriorKillCountServiceInter
 
     private void updateTop5(String warriorCode, Integer newKill) {
 
-        logger.info("warrior: {} killed: {}", warriorKillDb.getWarriorCodeName().get(warriorCode), newKill);
+        Warrior warrior= warriorDao.findWarriorById(warriorCode);
+        logger.info("warrior: {} killed: {}", warrior.getName(), newKill);
 
-        Map<String, Integer> warriorCodeKill = warriorKillDb.getWarriorCodeKillCount();
-
-        warriorCodeKill.put(warriorCode, newKill + warriorCodeKill.getOrDefault(warriorCode, 0));
-        warriorKillDb.setWarriorCodeKillCount(warriorCodeKill);
+        warrior.setScore(warrior.getScore() + newKill);
+        warriorDao.updateWarrior(warrior);
 
         if (top5Scorers.size() >= 5) {
-            if (top5Scorers.containsKey(warriorCode)) {
-                top5Scorers.put(warriorCode, warriorCodeKill.get(warriorCode));
+            if (top5Scorers.containsKey(warrior.getWarriorId())) {
+                top5Scorers.put(warrior.getWarriorId(), warrior.getScore());
             } else {
                 String lastWarriorCode = top5Scorers.keySet().toArray()[4].toString();
-                if (warriorCodeKill.get(lastWarriorCode) < warriorCodeKill.get(warriorCode)) {
+                if (top5Scorers.get(lastWarriorCode) < warrior.getScore()) {
                     top5Scorers.remove(lastWarriorCode);
-                    top5Scorers.put(warriorCode, warriorCodeKill.get(warriorCode));
+                    top5Scorers.put(warrior.getWarriorId(), warrior.getScore());
                 }
             }
         } else {
-            top5Scorers.put(warriorCode, warriorCodeKill.get(warriorCode));
+            top5Scorers.put(warrior.getWarriorId(), warrior.getScore());
         }
 
         top5Scorers = sortByValueDescending(top5Scorers);
@@ -75,8 +74,6 @@ public class WarriorKillCountServiceImpl implements WarriorKillCountServiceInter
 
     @Override
     public void saveWarriors(Map<String, String> warriorCodeName) throws JsonProcessingException {
-
-        warriorKillDb.setWarriorCodeName(warriorCodeName);
 
         List<Warrior> warriorsList = warriorMapper.mapWarriorMapToEntityList(warriorCodeName);
         warriorDao.saveWarriors(warriorsList);
@@ -93,7 +90,7 @@ public class WarriorKillCountServiceImpl implements WarriorKillCountServiceInter
         logger.info("fetching top warriors.....");
         Map<String, Integer> top5WarriorNamesKills = warriorKillDb.getTop5WarriorNameKill();
         if (!warriorKillDb.getTop5warriors().isEmpty()) {
-            warriorKillDb.getTop5warriors().forEach((warriorCode, kill) -> top5WarriorNamesKills.put(warriorKillDb.getWarriorCodeName().get(warriorCode), kill));
+            warriorKillDb.getTop5warriors().forEach((warriorCode, kill) -> top5WarriorNamesKills.put(warriorDao.findWarriorById(warriorCode).getName(), kill));
             sortByValueDescending(top5WarriorNamesKills);
             warriorKillDb.setTop5WarriorNameKill(top5WarriorNamesKills);
         }

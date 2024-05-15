@@ -9,10 +9,8 @@ import java.util.Map;
 public class WarriorKillDb {
 
 
-    private Map<String, String> warriorCodeName = new HashMap<>();
     private Map<String, Integer> top5warriors = new HashMap<>();
     private Map<String, Integer> top5WarriorNameKill = new HashMap<>();
-    private Map<String, Integer> warriorCodeKillCount = new HashMap<>();
 
 
     public Map<String, Integer> getTop5WarriorNameKill() {
@@ -21,23 +19,6 @@ public class WarriorKillDb {
 
     public void setTop5WarriorNameKill(Map<String, Integer> top5WarriorNameKill) {
         this.top5WarriorNameKill = top5WarriorNameKill;
-    }
-
-
-    public Map<String, Integer> getWarriorCodeKillCount() {
-        return warriorCodeKillCount;
-    }
-
-    public void setWarriorCodeKillCount(Map<String, Integer> warriorCodeKillCount) {
-        this.warriorCodeKillCount = warriorCodeKillCount;
-    }
-
-    public Map<String, String> getWarriorCodeName() {
-        return warriorCodeName;
-    }
-
-    public void setWarriorCodeName(Map<String, String> warriorCodeName) {
-        this.warriorCodeName = warriorCodeName;
     }
 
 

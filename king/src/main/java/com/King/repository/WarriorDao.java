@@ -36,4 +36,14 @@ public class WarriorDao {
     public List<Warrior> findAll() {
         return redisTemplate.opsForHash().values(HASH_KEY);
     }
+
+    public Warrior findWarriorById(String warriorId) {
+        return (Warrior) redisTemplate.opsForHash().get(HASH_KEY, warriorId);
+    }
+
+    public Warrior updateWarrior(Warrior warrior) {
+        redisTemplate.opsForHash().put(HASH_KEY, warrior.getWarriorId(), warrior);
+        return warrior;
+    }
+
 }
