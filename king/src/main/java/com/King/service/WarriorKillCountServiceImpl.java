@@ -1,8 +1,10 @@
 package com.King.service;
 
 import com.King.repository.WarriorDao;
-import com.King.repository.WarriorKillDb;
+
 import com.King.repository.WarriorMapper;
+import com.King.repository.WarriorTopWarriorMapper;
+import com.King.repository.entity.Top5Warrior;
 import com.King.repository.entity.Warrior;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
@@ -17,11 +19,12 @@ import java.util.stream.Collectors;
 public class WarriorKillCountServiceImpl implements WarriorKillCountServiceInterface {
 
     private final Logger logger = LoggerFactory.getLogger(WarriorKillCountServiceInterface.class);
-    @Autowired
-    private WarriorKillDb warriorKillDb;
 
     @Autowired
     private WarriorMapper warriorMapper;
+
+    @Autowired
+    private WarriorTopWarriorMapper warriorTopWarriorMapper;
 
     @Autowired
     private WarriorDao warriorDao;
@@ -36,40 +39,38 @@ public class WarriorKillCountServiceImpl implements WarriorKillCountServiceInter
 
     }
 
-    private Map<String, Integer> top5Scorers = new HashMap<>();
-
     @Override
     public void updateWarriorKills(Map<String, String> killerCodeKill) {
 
         String warriorCode = killerCodeKill.entrySet().iterator().next().getKey();
         updateTop5(warriorCode, Integer.parseInt(killerCodeKill.get(warriorCode)));
-        logger.info("Top 5 scorers ...... {}", top5Scorers);
+        Map<String, Integer> top5WarriorsMap = new HashMap<>();
+        List<Top5Warrior> top5Warriors = warriorDao.findTop5();
+        top5Warriors.forEach(w -> top5WarriorsMap.put(w.getName(), w.getScore()));
+        logger.info("Top 5 scorers ...... {}", sortByValueDescending(top5WarriorsMap));
     }
 
     private void updateTop5(String warriorCode, Integer newKill) {
 
-        Warrior warrior= warriorDao.findWarriorById(warriorCode);
+        Warrior warrior = warriorDao.findWarriorById(warriorCode);
+        List<Top5Warrior> top5Warriors = warriorDao.findTop5();
+        top5Warriors.sort((w1, w2) -> Integer.compare(w2.getScore(), w1.getScore()));
         logger.info("warrior: {} killed: {}", warrior.getName(), newKill);
 
         warrior.setScore(warrior.getScore() + newKill);
         warriorDao.updateWarrior(warrior);
 
-        if (top5Scorers.size() >= 5) {
-            if (top5Scorers.containsKey(warrior.getWarriorId())) {
-                top5Scorers.put(warrior.getWarriorId(), warrior.getScore());
-            } else {
-                String lastWarriorCode = top5Scorers.keySet().toArray()[4].toString();
-                if (top5Scorers.get(lastWarriorCode) < warrior.getScore()) {
-                    top5Scorers.remove(lastWarriorCode);
-                    top5Scorers.put(warrior.getWarriorId(), warrior.getScore());
-                }
+        if (top5Warriors.size() >= 5) {
+
+            if (top5Warriors.stream().filter(w -> Objects.equals(w.getWarriorId(), warrior.getWarriorId())).findFirst().orElse(null) != null) {
+                warriorDao.updateTop5Warrior(warriorTopWarriorMapper.top5WarriorMapper(warrior));
+            } else if (top5Warriors.get(4).getScore() < warrior.getScore()) {
+                warriorDao.deleteTop5Warrior(top5Warriors.get(4).getWarriorId());
+                warriorDao.updateTop5Warrior(warriorTopWarriorMapper.top5WarriorMapper(warrior));
             }
         } else {
-            top5Scorers.put(warrior.getWarriorId(), warrior.getScore());
+            warriorDao.updateTop5Warrior(warriorTopWarriorMapper.top5WarriorMapper(warrior));
         }
-
-        top5Scorers = sortByValueDescending(top5Scorers);
-        warriorKillDb.setTop5warriors(top5Scorers);
     }
 
     @Override
@@ -86,15 +87,11 @@ public class WarriorKillCountServiceImpl implements WarriorKillCountServiceInter
     }
 
     @Override
-    public Map<String, Integer> getTop5Warriors() {
+    public List<Top5Warrior> getTop5Warriors() {
         logger.info("fetching top warriors.....");
-        Map<String, Integer> top5WarriorNamesKills = warriorKillDb.getTop5WarriorNameKill();
-        if (!warriorKillDb.getTop5warriors().isEmpty()) {
-            warriorKillDb.getTop5warriors().forEach((warriorCode, kill) -> top5WarriorNamesKills.put(warriorDao.findWarriorById(warriorCode).getName(), kill));
-            sortByValueDescending(top5WarriorNamesKills);
-            warriorKillDb.setTop5WarriorNameKill(top5WarriorNamesKills);
-        }
-        return warriorKillDb.getTop5WarriorNameKill();
+        List<Top5Warrior> top5Warriors = warriorDao.findTop5();
+        top5Warriors.sort((w1, w2) -> Integer.compare(w2.getScore(), w1.getScore()));
+        return top5Warriors;
     }
 
 

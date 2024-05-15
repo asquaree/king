@@ -5,17 +5,18 @@ import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
 
-@RedisHash("Warrior")
-public class Warrior implements Serializable {
+@RedisHash("Top5Warrior")
+public class Top5Warrior implements Serializable {
 
     @Id
     private String warriorId;
     private String name;
-    private Integer score= 0;
+    private Integer score = 0;
 
-    public Warrior(String warriorId, String name) {
+    public Top5Warrior(String warriorId, String name, Integer score) {
         this.warriorId = warriorId;
         this.name = name;
+        this.score = score;
     }
 
     public String getWarriorId() {
@@ -31,7 +32,4 @@ public class Warrior implements Serializable {
         return score;
     }
 
-    public void setScore(Integer score) {
-        this.score = score;
-    }
 }

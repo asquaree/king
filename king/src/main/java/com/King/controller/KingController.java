@@ -1,6 +1,6 @@
 package com.King.controller;
 
-import com.King.repository.WarriorKillDb;
+import com.King.repository.entity.Top5Warrior;
 import com.King.repository.entity.Warrior;
 import com.King.service.WarriorKillCountServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,9 +19,6 @@ public class KingController {
     @Autowired
     private WarriorKillCountServiceImpl warriorKillCountServiceImpl;
 
-    @Autowired
-    private WarriorKillDb warriorKillDb;
-
     @PostMapping("/registerWarriors")
     public ResponseEntity<String> registerWarriors(@RequestBody Map<String, String> warriorCodeName) throws JsonProcessingException {
         // Access data from the map
@@ -38,7 +35,7 @@ public class KingController {
     }
 
     @GetMapping("/top5Players")
-    public ResponseEntity<Map<String, Integer>> getTop5Warriors() {
+    public ResponseEntity<List<Top5Warrior>> getTop5Warriors() {
 
         return ResponseEntity.ok(warriorKillCountServiceImpl.getTop5Warriors());
     }
