@@ -1,6 +1,10 @@
 package com.King.service;
 
+import com.King.repository.WarriorDao;
 import com.King.repository.WarriorKillDb;
+import com.King.repository.WarriorMapper;
+import com.King.repository.entity.Warrior;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,11 @@ public class WarriorKillCountServiceImpl implements WarriorKillCountServiceInter
     @Autowired
     private WarriorKillDb warriorKillDb;
 
+    @Autowired
+    private WarriorMapper warriorMapper;
+
+    @Autowired
+    private WarriorDao warriorDao;
 
     @Override
     public void ProcessData(Map<String, String> data) {
@@ -65,9 +74,18 @@ public class WarriorKillCountServiceImpl implements WarriorKillCountServiceInter
     }
 
     @Override
-    public void setWarriorCodeName(Map<String, String> warriorCodeName) {
+    public void saveWarriors(Map<String, String> warriorCodeName) throws JsonProcessingException {
+
         warriorKillDb.setWarriorCodeName(warriorCodeName);
+
+        List<Warrior> warriorsList = warriorMapper.mapWarriorMapToEntityList(warriorCodeName);
+        warriorDao.saveWarriors(warriorsList);
         logger.info("Registered players - {}", warriorCodeName);
+    }
+
+    public List<Warrior> getRegisteredWarriors() {
+
+        return warriorDao.findAll();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.King.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import java.util.Map;
 
 public interface WarriorKillCountServiceInterface {
@@ -8,7 +10,7 @@ public interface WarriorKillCountServiceInterface {
 
     void updateWarriorKills(Map<String, String> killerCodeKill);
 
-    void setWarriorCodeName(Map<String, String> warriorCodeName);
+    void saveWarriors(Map<String, String> warriorCodeName) throws JsonProcessingException;
 
     Map<String, Integer> getTop5Warriors();
 
