@@ -1,6 +1,7 @@
 package com.King.service;
 
 import com.King.repository.entity.Top5Warrior;
+import com.King.repository.entity.Warrior;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.catalina.LifecycleState;
 
@@ -14,6 +15,8 @@ public interface WarriorKillCountServiceInterface {
     void updateWarriorKills(Map<String, String> killerCodeKill);
 
     void saveWarriors(Map<String, String> warriorCodeName) throws JsonProcessingException;
+
+    List<Warrior> getRegisteredWarriors();
 
     List<Top5Warrior> getTop5Warriors();
 
